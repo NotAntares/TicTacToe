@@ -12,4 +12,21 @@ body{
 .board{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+}
+
+.board button {
+    border: none;
+    width: 150px;
+    height: 150px;
+    background-color: rgb(196, 172, 221);
+    transition: all 0.3s ease;
+}
+
+.board button:hover:enabled{
+    background-color: rgb(164, 144, 172);
+}
+
+.board button:disabled{
+    color: #222;
 }
