@@ -8,9 +8,37 @@
     <title>Tic Tac Toe</title>
 </head>
 <body>
-    <section class="board">
-    </section>
-    
+    <header>
+        <h1>score</h1>
+        <section class="score">
+            <article class="player">
+                <h2 class="playerName">player:</h2>
+                <h2 class="plPoints">0</h2>
+            </article>
+            <article>  
+                <h4>VS</h4> 
+            </article>
+            <article class="computer"> 
+                <h3>computer:</h3>
+                <h3 class="compPoints">0</h3>
+            </article>
+        </section>
+    </header>
+    <main>
+        <dialog>
+          <p>Let's play a round of Tic-Tac-Toe!</p>  
+          <form method="dialog">
+            <article>
+                <label for="name">Your Name?</label>
+                <input type="text" id="name" name="name" maxlength="10" required>
+            </article>
+
+            <button class="start">Start!</button>
+          </form>
+        </dialog>
+        <section class="board">
+        </section>
+    </main>
     <script src="scripts/javascript.js"></script>
 </body>
 </html>

@@ -1,48 +1,5 @@
 
 
-// const game = (function() {
-//     // set and reset Gameboard
-//     const set = () => {
-//         let row1 = [0,0,0];
-//         let row2 = [0,0,0];
-//         let row3 = [0,0,0];
-//         board = [row1, row2, row3];};
-   
-//         //view Gameboard in console   
-//     const info =() => console.table(board);
-
-
-//     // create User who can collect points
-//     const createPlayer = (name) => {
-//         let points = 0;
-//         const getPoints = () => points;
-//         const givePoints = () => points++;
-//         return{name, getPoints, givePoints};
-//     };
-//     // set up Computer-Player
-//     const computer = createPlayer("computer");
-
-
-//     // let players make marks
-//     const draw = (player, row, pos) =>{
-        
-//         if(player === computer.name){
-//             tag = 'O'
-//             computer.givePoints();
-//             console.log('Score is now' + computer.getPoints())
-//         }
-//         else{ 
-//             tag = 'X';
-//         }
-
-//         board[row].splice(pos,1,tag)
-//     };
-
-
-//     return{set, info, computer, draw};
-// })();
-
-
 const player = (function() {
     // create User who can collect points
     const createPlayer = (name) => {
@@ -67,6 +24,7 @@ const player = (function() {
 
 
 const game = (function() {
+    
     const winCons = [
         [0,1,2],
         [3,4,5],
@@ -78,8 +36,12 @@ const game = (function() {
         [2,4,6]
     ];
 
-    //initiate computer player
+    //initiate players
     const computer = player.createPlayer("computer");
+    const compPoints = document.querySelector(".compPoints");
+
+    const human = player.createPlayer("human");
+    const plPoints = document.querySelector(".plPoints");
 
     // computer makes their turn
     const compTurn = () =>{
@@ -87,24 +49,29 @@ const game = (function() {
             return e.marker === "";
         });
 
+        // check, if Player won already
         if(freeCells.length <= 4){
             checkWin("X");
             if(win === true){
                 console.log("congrats, You won!")
+                endRound(human);
                 return;
             }
             if(freeCells.length === 0){return};
         }
         
-
+        // tag random free cell
         tag = Math.floor(Math.random() * freeCells.length);
 
         freeCells[tag].marker = 'O';
         freeCells[tag].button.textContent = 'O';
         freeCells[tag].button.disabled = true;
+
+        // check if computer won
         checkWin("O");
         if(win === true){
-            console.log('oh No, you got outsmarted by a piece of metal :(');
+            console.log('oh no, you got outsmarted by a piece of metal :(');
+            endRound(computer);
         }
         
 
@@ -133,16 +100,57 @@ const game = (function() {
         
         return win;
     };
+
+    const endRound = (winner) =>{
+        // disable gameboard
+        freeCells.forEach(x => {
+            x.button.disabled = true;
+        });
+
+        // give Winner point
+        winner.givePoints();
+        if(winner.name === "computer"){
+            compPoints.textContent = winner.getPoints();
+        } else{
+            plPoints.textContent = winner.getPoints();
+        };
+
+        if(human.getPoints() + computer.getPoints() < 3){
+
+            setup.clear();
+            setup.setBoard();
+            
+        };
+
+
+
+    };
     
     
-    return{ computer, compTurn, info, checkWin,}
+    return{computer, human, compTurn, info, checkWin}
 })();
 
 const setup = (function(){
+    const dialog = document.querySelector("dialog");
+    const startBtn = document.querySelector(".start");
+    const plName = document.getElementById("name")
+    const playerName = document.querySelector(".playerName")
+    startBtn.addEventListener('click', ()=>{
+        console.log(plName.value);
+        if(plName.value == ""){
+         return;
+        }
+        else { 
+            playerName.textContent = plName.value + ":";
+        };
+    });
 
-     const board = document.querySelector(".board");
-     cells = [];
 
+    const board = document.querySelector(".board");
+    cells = [];
+
+   
+   
     const setBoard = () =>{
 
             
@@ -166,11 +174,19 @@ const setup = (function(){
    
         //view Gameboard in console   
     const info = () => console.table(cells);
+
+    const clear = () =>{
+       while (board.firstChild){
+        board.removeChild(board.firstChild);
+       }
+       cells = [];
+    }
     
-    return{setBoard, info, board, cells};
+    return{setBoard, info, clear, board, cells, dialog, plName};
 })();
 
 setup.setBoard();
+setup.dialog.showModal();
 
 // const play = (function() {
 
