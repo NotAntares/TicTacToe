@@ -6,10 +6,11 @@ const player = (function() {
         let points = 0;
         const getPoints = () => points;
         const givePoints = () => points++;
+        const deletePoints = () => points = 0;
         let marker = 'X';
         if(name === "computer"){
             marker = 'O';}
-        return{name, marker, getPoints, givePoints};
+        return{name, marker, getPoints, givePoints, deletePoints};
     };
 
 
@@ -18,12 +19,28 @@ const player = (function() {
 })();
 
 
-// verhindern, dass spieler letzen button clicken kann, nachdem PC gewonnen hat (oder er selbst);
-// punkte und rundensystem
-// player aufsetzen
-
-
 const game = (function() {
+
+    // button to start next round
+    const nextBtn = document.querySelector(".next");
+    nextBtn.addEventListener('click', () =>{
+        setup.clear();
+        setup.setBoard();
+        nextBtn.disabled = true;
+    });
+
+    const result = document.querySelector(".result");
+    const resultText = result.querySelector("p");
+    const restart = result.querySelector(".restart");
+    // button to restart match
+    restart.addEventListener('click',() =>{
+        setup.clear();
+        setup.setBoard();
+        human.deletePoints();
+        computer.deletePoints();
+        compPoints.textContent = 0;
+        plPoints.textContent = 0;
+    });
     
     const winCons = [
         [0,1,2],
@@ -102,6 +119,7 @@ const game = (function() {
     };
 
     const endRound = (winner) =>{
+        
         // disable gameboard
         freeCells.forEach(x => {
             x.button.disabled = true;
@@ -115,10 +133,21 @@ const game = (function() {
             plPoints.textContent = winner.getPoints();
         };
 
+        // start next round or show winner
         if(human.getPoints() + computer.getPoints() < 3){
+            nextBtn.disabled = false;    
+        }else {
 
-            setup.clear();
-            setup.setBoard();
+            result.showModal();
+
+            if(human.getPoints() > computer.getPoints()){
+                console.log(human.getPoints() + ' > ' + computer.getPoints())
+                resultText.textContent = "Yay, you won!"
+            } else{
+                console.log(human.getPoints() + ' < ' + computer.getPoints())
+                resultText.textContent = "Oh no, you got outsmarted by a piece of metal :("
+            };
+            
             
         };
 
@@ -131,7 +160,7 @@ const game = (function() {
 })();
 
 const setup = (function(){
-    const dialog = document.querySelector("dialog");
+    const dialog = document.querySelector(".namePlayer");
     const startBtn = document.querySelector(".start");
     const plName = document.getElementById("name")
     const playerName = document.querySelector(".playerName")
@@ -148,8 +177,6 @@ const setup = (function(){
 
     const board = document.querySelector(".board");
     cells = [];
-
-   
    
     const setBoard = () =>{
 
@@ -187,14 +214,3 @@ const setup = (function(){
 
 setup.setBoard();
 setup.dialog.showModal();
-
-// const play = (function() {
-
-//     // const {set, info} = game();
-//     const board = game.setBoard();
-//     const info = game.info();
-//     // create computer player
-    
-
-//     return {computer, info, board, draw};
-// })();

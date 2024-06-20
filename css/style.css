@@ -3,7 +3,7 @@
     margin: 0;
     color: #222;
     text-transform: uppercase;
-    font-family:'Courier New', Courier, monospace
+    font-family: "Courier Prime", monospace;
 }
 
 p{
@@ -17,6 +17,8 @@ label, form button{
 body{
     height: 100vh;
     background-color: rgb(232, 236, 238);
+    display:flex;
+    flex-direction: column;
 }
 
 dialog{
@@ -67,13 +69,15 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
+    position: relative;
 }
 
 header{
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 20px;
+    padding: 20px 20px;
     background-color: #222;
 }
 
@@ -99,7 +103,7 @@ h2, h3, h4, h1{
 
 h1{
     font-size: 60px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 h2{
@@ -133,19 +137,15 @@ h3{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 15px;
-    padding-top: 40px;
-}
-
-dialog{
-    z-index: 100;
+    padding: 20px;
 }
 
 .board button {
     border: none;
     border-radius: 10px;
     box-shadow: 5px 5px 10px rgba(249, 78, 78, 0.3);
-    width: 150px;
-    height: 150px;
+    width: 140px;
+    aspect-ratio: 1/1;
     font-size: 80px;
     background-color: rgb(255, 255, 255);
     transition: all 0.3s ease;
@@ -158,6 +158,45 @@ dialog{
 
 .board button:disabled{
     color: #222;
+}
+
+.next{
+    position: absolute;
+    width: 400px;
+    height: 100px;
+    font-size: 40px;
+    border: 4px solid #fff;
+    border-radius: 10px;
+    /* outline: 1px solid #222; */
+    background-color: #222;
+    color: #fff;
+    transition: all .3s ease;
+    opacity: 0.8;
+    z-index: 100;
+}
+
+.next:hover{
+    text-shadow: 3px 2px 2px rgba(251, 12, 12,1), 0px -1px 3px rgba(12, 79, 251,.5),-3px 0px 2px rgba(52, 251, 12, 1);
+    font-size: 50px;
+    width: 420px;
+    height: 105px;
+}
+
+.next:disabled{
+    opacity:0;
+    z-index: -100;
+}
+
+.result article{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.restart{
+    width: 300px;
+    height: 60px;
 }
 
 

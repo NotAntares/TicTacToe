@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/style.css">
     <title>Tic Tac Toe</title>
@@ -25,7 +28,7 @@
         </section>
     </header>
     <main>
-        <dialog>
+        <dialog class="namePlayer">
           <p>Let's play a round of Tic-Tac-Toe!</p>  
           <form method="dialog">
             <article>
@@ -38,6 +41,15 @@
         </dialog>
         <section class="board">
         </section>
+        <button class="next" disabled> Next Round!</button>
+        <dialog class="result">
+            <article>
+                <p></p>  
+                <form method="dialog">
+                <button class="restart">Start another match!</button>
+                </form>
+            </article>
+        </dialog>
     </main>
     <script src="scripts/javascript.js"></script>
 </body>
