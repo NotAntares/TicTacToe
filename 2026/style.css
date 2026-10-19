@@ -1,0 +1,44 @@
+*{
+    margin: 0;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+header {
+    text-align: center;
+    margin-top: 20px;
+}
+
+header div{
+    display: flex;
+    gap:50px;
+    justify-content: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#gameboard {
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 20vw);
+    grid-template-rows: repeat(3, 20vh);
+    gap: 5px;
+    margin: 20px auto;
+}
+
+footer {
+    text-align: center;
+    margin: 20px;
+}
