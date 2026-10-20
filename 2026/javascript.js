@@ -1,41 +1,4 @@
-const gameController = (() => {
-    const player1 = createPlayer("Schmojo", "X");
-    const player2 = createPlayer("JoSchmo", "O");
-    console.log(player1, player2);
-    let activePlayer = player1;
-    let win = false;
-    
-    // aktuell scheine ich aktivePlayer nicht zu ändern, wenn ich takeTurn() aufrufe. Ich muss das noch debuggen.
-    const takeTurn = () => {
-        activePlayer = (activePlayer === player1) ? player2 : player1;
-        return activePlayer;
-    };
 
-    // while (win === false) {
-    //     activePlayer.makeMove()
-    // };
-
-    return {
-            player1, player2, takeTurn, activePlayer
-        };
-})();
-
-function createPlayer(name, mark) {
-    let score= 0;
-    let moveCount = 0;
-
-    const getScore = () => score;
-    const win = () => score++;
-    // const makeMove = (x, y) => {
-    //     gameboard.makeMove(x, y, mark);
-    //     moveCount++;
-    //     takeTurn();
-    //     if (moveCount >= 3) {
-    //         checkWin(mark);
-    //     };
-    // };
-    return {name, getScore, win, mark};
-};
 
 const gameboard = (() => {
     const boardelement = document.getElementById("gameboard");
@@ -61,9 +24,9 @@ const gameboard = (() => {
             boardelement.appendChild(cellButton);
             cellButton.addEventListener("click", () => {
                 if (board[i][j].getValue() === "") {
-                    board[i][j].setValue(gameController.activePlayer.mark);
-                    console.log(`Player ${gameController.activePlayer.name} placed ${gameController.activePlayer.mark} at (${i}, ${j})`);
-                    cellButton.textContent = gameController.activePlayer.mark;
+                    board[i][j].setValue(gameController.getActivePlayer().mark);
+                    console.log(`Player ${gameController.getActivePlayer().name} placed ${gameController.getActivePlayer().mark} at (${i}, ${j})`);
+                    cellButton.textContent = gameController.getActivePlayer().mark;
                     gameController.takeTurn();
                 }
             });
@@ -112,7 +75,7 @@ const gameboard = (() => {
 
             if (aValue === bValue && aValue === cValue && aValue !== "") {
                 console.log(`Player ${aValue} wins!`);
-                return aValue;
+                return true;
                  // Return the winning marker
             }
             else{
@@ -121,14 +84,81 @@ const gameboard = (() => {
         };
     };
 
-    return{getBoard, makeMove, checkwin};
+    const resetBoard = () => {
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < columns; j++) {
+                board[i][j].setValue("");
+                const cellButton = boardelement.children[i * columns + j];
+                cellButton.textContent = "";
+            }
+        }
+    };
+
+    return{getBoard, makeMove, checkwin, resetBoard};
 
 })();
 
-console.log(gameboard.getBoard());
+const gameController = (() => {
+    const player1 = createPlayer("Schmojo", "X");
+    const player2 = createPlayer("JoSchmo", "O");
+    console.log(player1, player2);
+    let activePlayer = player1;
+    let moveCount = 0;
 
-// gameController.player1.makeMove(0, 0);
-// gameController.player1.makeMove(0, 1);
-// gameController.player1.makeMove(0, 2);
-console.log(gameboard.getBoard());
-console.log(gameboard.checkwin());
+    const takeTurn = () => {
+        if (moveCount >= 3) {
+            if(gameboard.checkwin()==true){
+                document.querySelector(".win").textContent = `Player ${activePlayer.name} wins!`;
+                activePlayer.win();
+            }
+        };
+        activePlayer = (activePlayer === player1) ? player2 : player1;
+        moveCount++;
+
+        return activePlayer;
+    };
+
+    const getActivePlayer = () => activePlayer;
+
+    const nextRound = () => {
+        gameboard.resetBoard();
+        moveCount = 0;
+        activePlayer = player1;
+    };
+
+    const nextButton = document.getElementById("new-round");
+    nextButton.addEventListener("click", nextRound);
+
+    const resetGame = () => {
+        gameboard.resetBoard();
+        moveCount = 0;
+        activePlayer = player1;
+        player1.resetScore();
+        player2.resetScore();
+    };
+
+    const resetButton = document.getElementById("reset-button");
+    resetButton.addEventListener("click", resetGame);
+
+    return {
+            player1, player2, takeTurn, activePlayer, getActivePlayer
+        };
+})();
+
+function createPlayer(name, mark) {
+    let score= 0;
+    const scoreElement = document.createElement("h2");
+    document.querySelector(".score").appendChild(scoreElement);
+    scoreElement.textContent = ` ${score}`;
+
+    const resetScore = () => {
+        score = 0;
+        scoreElement.textContent = `${score}`
+    };
+    const getScore = () => score;
+    const win = () => {
+        score++;
+        scoreElement.textContent = `${score}`;
+    };
+    return {name, getScore, win, mark, resetScore};
+};
